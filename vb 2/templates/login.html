@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AMCF — Sign In</title>
+<meta name="description" content="Sign in to the AI Manufacturing Intelligence Platform to monitor machines, analyze data, and optimize production."/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="auth-body">
+
+<!-- Animated Background Particles -->
+<div class="auth-particles" id="particles"></div>
+
+<!-- Scanning Line Effect -->
+<div class="scan-line"></div>
+
+<!-- Main Auth Container -->
+<div class="auth-container">
+  <!-- Left Branding Panel -->
+  <div class="auth-brand">
+    <div class="brand-content">
+      <div class="brand-orb-wrap">
+        <div class="brand-orb"></div>
+        <div class="brand-ring ring-1"></div>
+        <div class="brand-ring ring-2"></div>
+        <div class="brand-ring ring-3"></div>
+      </div>
+      <h1 class="brand-title">AMCF</h1>
+      <p class="brand-subtitle">AI Manufacturing Copilot Framework</p>
+      <div class="brand-tagline">Industry 4.0 Intelligence Platform</div>
+      <div class="brand-features">
+        <div class="bf-item">
+          <span class="bf-icon">◈</span>
+          <div>
+            <div class="bf-label">Real-Time Monitoring</div>
+            <div class="bf-desc">8 machines · 4 production lines</div>
+          </div>
+        </div>
+        <div class="bf-item">
+          <span class="bf-icon">⊛</span>
+          <div>
+            <div class="bf-label">AI Root Cause Analysis</div>
+            <div class="bf-desc">Predictive failure detection</div>
+          </div>
+        </div>
+        <div class="bf-item">
+          <span class="bf-icon">◉</span>
+          <div>
+            <div class="bf-label">Smart Copilot Chat</div>
+            <div class="bf-desc">Natural language factory insights</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-footer">
+      <span class="brand-status"><span class="live-dot"></span> System Online</span>
+      <span class="brand-version">v2.0 · Secure Access</span>
+    </div>
+  </div>
+
+  <!-- Right Form Panel -->
+  <div class="auth-form-panel">
+    <div class="auth-form-inner">
+      <div class="auth-form-header">
+        <div class="afh-icon">⬡</div>
+        <h2 class="afh-title">Welcome Back</h2>
+        <p class="afh-sub">Sign in to access your manufacturing intelligence dashboard</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="auth-alert {{ category }}" id="authAlert">
+              <span class="aa-icon">{{ '✓' if category == 'success' else '✕' }}</span>
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form class="auth-form" method="POST" action="/login" id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <div class="input-wrap">
+            <span class="input-icon">⊡</span>
+            <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required autocomplete="username"/>
+            <span class="input-focus-line"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">◆</span>
+            <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required autocomplete="current-password"/>
+            <span class="input-focus-line"></span>
+          </div>
+        </div>
+
+        <button type="submit" class="auth-btn" id="loginBtn">
+          <span class="btn-text">Access Platform</span>
+          <span class="btn-arrow">→</span>
+          <div class="btn-loader hidden" id="btnLoader">
+            <span></span><span></span><span></span>
+          </div>
+        </button>
+      </form>
+
+      <div class="auth-divider">
+        <span class="divider-line"></span>
+        <span class="divider-text">NEW OPERATOR</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <a href="/register" class="auth-link-btn" id="registerLink">
+        <span>Create New Account</span>
+        <span class="link-arrow">↗</span>
+      </a>
+    </div>
+
+    <div class="auth-form-footer">
+      <span class="aff-text">Protected by AMCF Security Protocol</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Particle Background
+(function(){
+  const c = document.getElementById('particles');
+  for(let i = 0; i < 40; i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100 + '%';
+    p.style.top = Math.random()*100 + '%';
+    p.style.animationDelay = Math.random()*6 + 's';
+    p.style.animationDuration = (4 + Math.random()*8) + 's';
+    p.style.width = p.style.height = (1 + Math.random()*3) + 'px';
+    c.appendChild(p);
+  }
+})();
+
+// Form submit animation
+document.getElementById('loginForm').addEventListener('submit', function(){
+  const btn = document.getElementById('loginBtn');
+  btn.classList.add('loading');
+  document.getElementById('btnLoader').classList.remove('hidden');
+  document.querySelector('.btn-text').style.opacity = '0';
+  document.querySelector('.btn-arrow').style.opacity = '0';
+});
+</script>
+</body>
+</html>
