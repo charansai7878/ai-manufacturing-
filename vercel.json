@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "functions": {
+        "src/app.py": {
+            "runtime": "@vercel/python"
+        }
+    },
+    "routes": [
+        {
+            "src": "/static/(.*)",
+            "dest": "/static/$1",
+            "continue": true
+        },
+        {
+            "src": "/(.*)",
+            "dest": "src/app.py"
+        }
+    ]
+}

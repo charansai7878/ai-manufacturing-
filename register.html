@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMCF — Create Account</title>
+    <meta name="description"
+        content="Register a new operator account for the AI Manufacturing Intelligence Platform." />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+</head>
+
+<body class="auth-body">
+
+    <!-- Animated Background Particles -->
+    <div class="auth-particles" id="particles"></div>
+
+    <!-- Scanning Line Effect -->
+    <div class="scan-line"></div>
+
+    <!-- Main Auth Container -->
+    <div class="auth-container">
+        <!-- Left Branding Panel -->
+        <div class="auth-brand">
+            <div class="brand-content">
+                <div class="brand-orb-wrap">
+                    <div class="brand-orb"></div>
+                    <div class="brand-ring ring-1"></div>
+                    <div class="brand-ring ring-2"></div>
+                    <div class="brand-ring ring-3"></div>
+                </div>
+                <h1 class="brand-title">AMCF</h1>
+                <p class="brand-subtitle">AI Manufacturing Copilot Framework</p>
+                <div class="brand-tagline">Industry 4.0 Intelligence Platform</div>
+                <div class="brand-features">
+                    <div class="bf-item">
+                        <span class="bf-icon">◈</span>
+                        <div>
+                            <div class="bf-label">Real-Time Monitoring</div>
+                            <div class="bf-desc">8 machines · 4 production lines</div>
+                        </div>
+                    </div>
+                    <div class="bf-item">
+                        <span class="bf-icon">⊛</span>
+                        <div>
+                            <div class="bf-label">AI Root Cause Analysis</div>
+                            <div class="bf-desc">Predictive failure detection</div>
+                        </div>
+                    </div>
+                    <div class="bf-item">
+                        <span class="bf-icon">◉</span>
+                        <div>
+                            <div class="bf-label">Smart Copilot Chat</div>
+                            <div class="bf-desc">Natural language factory insights</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="brand-footer">
+                <span class="brand-status"><span class="live-dot"></span> System Online</span>
+                <span class="brand-version">v2.0 · Secure Access</span>
+            </div>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="auth-form-panel">
+            <div class="auth-form-inner">
+                <div class="auth-form-header">
+                    <div class="afh-icon">⬢</div>
+                    <h2 class="afh-title">Create Account</h2>
+                    <p class="afh-sub">Register as a new operator to access the manufacturing intelligence platform</p>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="auth-alert {{ category }}" id="authAlert">
+                    <span class="aa-icon">{{ '✓' if category == 'success' else '✕' }}</span>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <form class="auth-form" method="POST" action="/register" id="registerForm">
+                    <div class="form-group">
+                        <label class="form-label" for="fullname">Full Name</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">⊡</span>
+                            <input type="text" id="fullname" name="fullname" class="form-input"
+                                placeholder="Enter your full name" required autocomplete="name" />
+                            <span class="input-focus-line"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="username">Username</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">⊡</span>
+                            <input type="text" id="username" name="username" class="form-input"
+                                placeholder="Choose a username" required autocomplete="username" />
+                            <span class="input-focus-line"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">◆</span>
+                            <input type="password" id="password" name="password" class="form-input"
+                                placeholder="Create a strong password" required minlength="4"
+                                autocomplete="new-password" />
+                            <span class="input-focus-line"></span>
+                        </div>
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="ps-bar">
+                                <div class="ps-fill" id="psFill"></div>
+                            </div>
+                            <span class="ps-text" id="psText">Password Strength</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="confirm_password">Confirm Password</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">◆</span>
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-input"
+                                placeholder="Re-enter your password" required minlength="4"
+                                autocomplete="new-password" />
+                            <span class="input-focus-line"></span>
+                        </div>
+                        <div class="match-status hidden" id="matchStatus">
+                            <span class="ms-icon" id="msIcon"></span>
+                            <span class="ms-text" id="msText"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-btn" id="registerBtn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-arrow">→</span>
+                        <div class="btn-loader hidden" id="btnLoader">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </button>
+                </form>
+
+                <div class="auth-divider">
+                    <span class="divider-line"></span>
+                    <span class="divider-text">EXISTING OPERATOR</span>
+                    <span class="divider-line"></span>
+                </div>
+
+                <a href="/login" class="auth-link-btn" id="loginLink">
+                    <span>Sign In Instead</span>
+                    <span class="link-arrow">↗</span>
+                </a>
+            </div>
+
+            <div class="auth-form-footer">
+                <span class="aff-text">Protected by AMCF Security Protocol</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particle Background
+        (function () {
+            const c = document.getElementById('particles');
+            for (let i = 0; i < 40; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.top = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 6 + 's';
+                p.style.animationDuration = (4 + Math.random() * 8) + 's';
+                p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
+                c.appendChild(p);
+            }
+        })();
+
+        // Password strength meter
+        const pw = document.getElementById('password');
+        const fill = document.getElementById('psFill');
+        const psText = document.getElementById('psText');
+        pw.addEventListener('input', function () {
+            const v = pw.value;
+            let score = 0;
+            if (v.length >= 4) score++;
+            if (v.length >= 8) score++;
+            if (/[A-Z]/.test(v)) score++;
+            if (/[0-9]/.test(v)) score++;
+            if (/[^A-Za-z0-9]/.test(v)) score++;
+            const pct = (score / 5) * 100;
+            fill.style.width = pct + '%';
+            if (score <= 1) { fill.style.background = '#ff2952'; psText.textContent = 'Weak'; psText.style.color = '#ff2952'; }
+            else if (score <= 2) { fill.style.background = '#ff6200'; psText.textContent = 'Fair'; psText.style.color = '#ff6200'; }
+            else if (score <= 3) { fill.style.background = '#ffd500'; psText.textContent = 'Good'; psText.style.color = '#ffd500'; }
+            else if (score <= 4) { fill.style.background = '#00d4ff'; psText.textContent = 'Strong'; psText.style.color = '#00d4ff'; }
+            else { fill.style.background = '#00ff8c'; psText.textContent = 'Excellent'; psText.style.color = '#00ff8c'; }
+            checkMatch();
+        });
+
+        // Password match check
+        const confirm = document.getElementById('confirm_password');
+        const matchDiv = document.getElementById('matchStatus');
+        const msIcon = document.getElementById('msIcon');
+        const msText = document.getElementById('msText');
+        function checkMatch() {
+            if (confirm.value.length === 0) { matchDiv.classList.add('hidden'); return; }
+            matchDiv.classList.remove('hidden');
+            if (pw.value === confirm.value) {
+                msIcon.textContent = '✓'; msText.textContent = 'Passwords match';
+                matchDiv.className = 'match-status match';
+            } else {
+                msIcon.textContent = '✕'; msText.textContent = 'Passwords do not match';
+                matchDiv.className = 'match-status no-match';
+            }
+        }
+        confirm.addEventListener('input', checkMatch);
+
+        // Form submit animation
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            if (pw.value !== confirm.value) {
+                e.preventDefault();
+                matchDiv.classList.remove('hidden');
+                msIcon.textContent = '✕'; msText.textContent = 'Passwords do not match';
+                matchDiv.className = 'match-status no-match';
+                confirm.focus();
+                return;
+            }
+            const btn = document.getElementById('registerBtn');
+            btn.classList.add('loading');
+            document.getElementById('btnLoader').classList.remove('hidden');
+            document.querySelector('.btn-text').style.opacity = '0';
+            document.querySelector('.btn-arrow').style.opacity = '0';
+        });
+    </script>
+</body>
+
+</html>

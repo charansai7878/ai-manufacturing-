@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INDUSTRIAL NEXUS | Manufacturing Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <!-- TOP NAVIGATION BAR -->
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px;">
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <div
+          style="width: 45px; height: 45px; background: var(--accent); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #000; font-size: 1.4rem;">
+          N</div>
+        <div>
+          <h2 class="mono" style="font-size: 1.2rem; letter-spacing: 4px;">INDUSTRIAL<span
+              style="color: var(--accent);">NEXUS</span></h2>
+          <div style="font-size: 0.65rem; color: var(--text-dim); letter-spacing: 2px;">SECURE INTELLIGENCE TRANSCEIVER
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 30px;">
+        <div style="text-align: right;">
+          <div style="font-size: 0.7rem; color: var(--text-dim);">AUTHORIZED OPERATOR</div>
+          <div class="mono" style="font-size: 0.9rem; font-weight: 700;">{{ session.get('fullname') }}</div>
+        </div>
+        <a href="/logout" class="btn" style="padding: 10px 20px; font-size: 0.75rem;">TERMINATE SESSION</a>
+      </div>
+    </header>
+
+    <!-- ──────────── STAGE 1: SYSTEM OVERVIEW ──────────────────────── -->
+    <section id="stage1" class="animate">
+      <div class="stage-title">
+        <h1 class="glow-text">Strategic Nexus</h1>
+        <p class="stage-subtitle">Access global industrial telemetry. Calibrate the intelligence engine by selecting a
+          strategic investment bracket or industrial domain.</p>
+      </div>
+
+      <div class="start-grid">
+        <!-- Investment Intelligence -->
+        <div class="glass-panel nav-card animate" style="animation-delay: 0.1s;">
+          <h3 class="mono" style="font-size: 1rem; margin-bottom: 25px; color: var(--accent);">[01] INVESTMENT TIERS
+          </h3>
+          <div class="category-list">
+            <div class="cat-item" onclick="showStage('stage2', 'low')">
+              <div style="width: 12px; height: 12px; background: var(--green); border-radius: 2px;"></div>
+              <div>
+                <strong class="mono">TIER ALPHA | MICRO-SCALE</strong>
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">VALUATION: ₹5L — ₹25L • ENTRY
+                  PROTOCOL</div>
+              </div>
+            </div>
+            <div class="cat-item" onclick="showStage('stage2', 'medium')">
+              <div style="width: 12px; height: 12px; background: var(--yellow); border-radius: 2px;"></div>
+              <div>
+                <strong class="mono">TIER BETA | INDUSTRIAL GRADE</strong>
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">VALUATION: ₹25L — ₹2Cr •
+                  MID-RANGE OPS</div>
+              </div>
+            </div>
+            <div class="cat-item" onclick="showStage('stage2', 'high')">
+              <div style="width: 12px; height: 12px; background: var(--red); border-radius: 2px;"></div>
+              <div>
+                <strong class="mono">TIER GAMMA | AUTONOMOUS SCALE</strong>
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">VALUATION: ₹2Cr+ • ENTERPRISE
+                  LOGISTICS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain Infrastructure -->
+        <div class="glass-panel nav-card animate" style="animation-delay: 0.2s;">
+          <h3 class="mono" style="font-size: 1rem; margin-bottom: 25px; color: var(--accent);">[02] SECTORAL DOMAINS
+          </h3>
+          <div class="domain-grid">
+            {% for key, d in domains.items() %}
+            <div class="domain-btn" onclick="showStage('stage3', '{{ key }}')">
+              <div style="font-size: 1.4rem; margin-bottom: 8px;">{{ d.icon }}</div>
+              <div class="mono" style="font-size: 0.7rem; font-weight: 700;">{{ d.title | upper }}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Global Industry Telemetry -->
+      <div class="summary-stats animate" style="animation-delay: 0.3s;">
+        <div class="stat-box">
+          <span class="stat-lbl">Active Entities</span>
+          <span class="stat-val" id="sum-biz">...</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-lbl">Compute Categories</span>
+          <span class="stat-val" id="sum-mach">...</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-lbl">Feedstock Modules</span>
+          <span class="stat-val" id="sum-mat">...</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-lbl">Market Velocity</span>
+          <span class="stat-val" id="sum-growth">...</span>
+        </div>
+      </div>
+
+      <!-- Opportunity Simulator Entry -->
+      <div class="glass-panel animate"
+        style="margin-top: 40px; animation-delay: 0.35s; cursor: pointer; border-left: 6px solid var(--accent);"
+        onclick="showStage('stage10')">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 class="mono" style="font-size: 1rem; color: var(--accent); margin-bottom: 8px;">[03] PRODUCT OPPORTUNITY
+              SIMULATOR</h3>
+            <p style="font-size: 0.85rem; color: var(--text-dim);">Initialize a custom industrial blueprint by entering
+              your own business idea and capital parameters.</p>
+          </div>
+          <div style="font-size: 1.5rem; color: var(--accent);">➔</div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 50px;">
+        <button class="btn btn-primary animate" style="animation-delay: 0.4s; padding: 18px 40px; border-radius: 4px;"
+          onclick="showStage('stage8')">
+          INITIALIZE DATA HUB PROTOCOL [SECURE ACCESS]
+        </button>
+      </div>
+    </section>
+
+    <!-- ──────────── STAGE 2: CAPITAL EVALUATION ─────────────────── -->
+    <section id="stage2" class="hidden">
+      <div class="stage-title">
+        <h1 id="inv-title" class="glow-text">Capital Metrics</h1>
+        <p id="inv-subtitle" class="stage-subtitle"></p>
+      </div>
+
+      <div class="glass-panel animate">
+        <div class="investment-details">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+            <div class="stat-box">
+              <span class="stat-lbl">VALUATION RANGE</span>
+              <span class="stat-val" id="inv-range"></span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-lbl">AUTONOMY INDEX</span>
+              <span class="stat-val" id="inv-auto" style="font-size: 1rem; color: #fff;"></span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-lbl">ROI PROJECTION</span>
+              <span class="stat-val" id="inv-roi"></span>
+            </div>
+          </div>
+
+          <div
+            style="background: rgba(255,255,255,0.02); padding: 30px; border-radius: 8px; margin-top: 30px; border: 1px solid var(--border);">
+            <h4 class="mono" style="margin-bottom: 15px; color: var(--accent); font-size: 0.8rem;">REPRESENTATIVE MODELS
+            </h4>
+            <p id="inv-ex" style="line-height: 1.8; color: var(--text-dim);"></p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+        <button class="btn" onclick="showStage('stage1')">REVERT TO NEXUS</button>
+        <button class="btn btn-primary" onclick="showStage('stage3')">ANALYZE SECTORS ➔</button>
+      </div>
+    </section>
+
+    <!-- ──────────── STAGE 3: SECTORAL ANALYTICS ──────────────────── -->
+    <section id="stage3" class="hidden">
+      <div class="stage-title">
+        <h1 id="dom-title" class="glow-text">Sectoral Intel</h1>
+        <p id="dom-icon" style="font-size: 3.5rem; margin: 15px 0;"></p>
+      </div>
+
+      <div class="glass-panel animate">
+        <h2 id="dom-name" style="margin-bottom: 25px; color: var(--accent); font-size: 1.4rem;"></h2>
+        <p id="dom-overview" style="margin-bottom: 35px; line-height: 1.8; opacity: 0.8; font-size: 1.05rem;"></p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+          <div
+            style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 8px; border: 1px solid var(--border);">
+            <h4 class="mono" style="margin-bottom: 15px; font-size: 0.8rem; color: var(--text-dim);">ESTIMATED GLOBAL
+              CAPACITY</h4>
+            <p id="dom-market" class="stat-val" style="font-size: 1.5rem;"></p>
+          </div>
+          <div
+            style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 8px; border: 1px solid var(--border);">
+            <h4 class="mono" style="margin-bottom: 15px; font-size: 0.8rem; color: var(--text-dim);">OPERATIONAL
+              METHODOLOGIES</h4>
+            <ul id="dom-methods" style="list-style: none; display: flex; flex-wrap: wrap; gap: 10px;"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+        <button class="btn" onclick="goBackFromStage3()">PREVIOUS ARRAY</button>
+        <button class="btn btn-primary" onclick="showStage('stage4')">OPEN BUSINESS BLUEPRINTS ➔</button>
+      </div>
+    </section>
+
+    <!-- ──────────── STAGE 4: MODEL BLUEPRINTS ────────────────────── -->
+    <section id="stage4" class="hidden">
+      <div class="stage-title">
+        <h1 class="glow-text">Industrial Blueprints</h1>
+        <p class="stage-subtitle">Select a specific operational blueprint to extract technical requirements and
+          logistical parameters.</p>
+      </div>
+
+      <div class="card-grid animate" id="biz-list"></div>
+
+      <div style="margin-top: 40px;">
+        <button class="btn" onclick="showStage('stage3')">BACK TO SECTORAL INTEL</button>
+      </div>
+    </section>
+
+    <!-- ──────────── STAGE 5 & 6: OPERATIONAL MATRIX ────────── -->
+    <section id="stage5" class="hidden">
+      <div class="stage-title">
+        <h1 id="ops-title" class="glow-text">Operational Matrix</h1>
+        <p id="ops-name" class="stage-subtitle mono" style="color: var(--accent);"></p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;" class="animate">
+        <!-- Feedstock modules -->
+        <div class="glass-panel">
+          <h3 class="mono" style="margin-bottom: 25px; font-size: 0.9rem; letter-spacing: 2px;">[05] FEEDSTOCK & RAW
+            MATERIALS</h3>
+          <div id="mat-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
+
+          <div style="margin-top: 35px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+            <div class="stat-box" style="padding: 15px; border-style: dashed;">
+              <span class="stat-lbl" style="font-size: 0.6rem;">COST INDEX</span>
+              <span class="mono" style="font-size: 0.8rem; color: var(--green);">STABLE</span>
+            </div>
+            <div class="stat-box" style="padding: 15px; border-style: dashed;">
+              <span class="stat-lbl" style="font-size: 0.6rem;">SUPPLY CHAIN</span>
+              <span class="mono" style="font-size: 0.8rem; color: var(--accent);">OPTIMIZED</span>
+            </div>
+            <div class="stat-box" style="padding: 15px; border-style: dashed;">
+              <span class="stat-lbl" style="font-size: 0.6rem;">RELIABILITY</span>
+              <span class="mono" style="font-size: 0.8rem; color: var(--yellow);">92%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Computation/Machine units -->
+        <div class="glass-panel">
+          <h3 class="mono" style="margin-bottom: 25px; font-size: 0.9rem; letter-spacing: 2px;">[06] PRODUCTION UNIT
+            ARCHITECTURE</h3>
+          <div id="mach-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
+
+          <div
+            style="margin-top: 35px; background: rgba(94, 250, 242, 0.05); padding: 25px; border-radius: 8px; border: 1px solid var(--border);">
+            <span class="stat-lbl">AI HEALTH PROJECTION</span>
+            <div class="stat-val" style="margin: 10px 0; font-size: 2.2rem;">96.8%</div>
+            <p class="mono" style="font-size: 0.6rem; color: var(--text-dim); line-height: 1.6;">TELEMTRIC DATA
+              INDICATES NOMINAL PERFORMANCE ACROSS ALL UNITS.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+        <button class="btn" onclick="showStage('stage4')">REVERT TO BLUEPRINTS</button>
+        <button class="btn btn-primary" onclick="showStage('stage7')">INITIALIZE PREDICTIVE DASHBOARD ➔</button>
+      </div>
+    </section>
+
+    <!-- ──────────── STAGE 7: PREDICTIVE ANALYTICS DASHBOARD ───────────── -->
+    <section id="stage7" class="hidden">
+      <div class="stage-title">
+        <h1 class="glow-text">Predictive Dashboard</h1>
+        <p class="stage-subtitle">Real-time industrial telemetry integrated with machine-learning predictive insights.
+        </p>
+      </div>
+
+      <div class="animate">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 40px;">
+          <div class="glass-panel" style="padding: 25px; text-align: center;">
+            <span class="stat-lbl">UNIT HEALTH SCORE</span>
+            <span class="stat-val" id="ai-health" style="font-size: 2.5rem; margin-top: 10px;">--</span>
+          </div>
+          <div class="glass-panel" style="padding: 25px; text-align: center;">
+            <span class="stat-lbl">CRITICAL FAIL RISK</span>
+            <span class="stat-val" id="ai-risk" style="font-size: 2.5rem; margin-top: 10px;">--</span>
+          </div>
+          <div class="glass-panel" style="padding: 25px; text-align: center;">
+            <span class="stat-lbl">THROUGHPUT YIELD</span>
+            <span class="stat-val" id="ai-eff" style="font-size: 2.5rem; margin-top: 10px;">--</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+          <div class="glass-panel">
+            <h3 class="mono" style="margin-bottom: 25px; font-size: 0.9rem;">STRATEGIC TELEMETRY</h3>
+            <div style="display: flex; flex-direction: column; gap: 25px;">
+              <div class="cat-item" style="border-left: 4px solid var(--green);">
+                <div>
+                  <strong class="mono" style="font-size: 0.8rem;">FEEDSTOCK CONSUMPTION ANALYSIS</strong>
+                  <p id="ai-mat" style="font-size: 0.85rem; color: var(--text-dim); margin-top:8px; line-height: 1.5;">
+                  </p>
+                </div>
+              </div>
+              <div class="cat-item" style="border-left: 4px solid var(--accent);">
+                <div>
+                  <strong class="mono" style="font-size: 0.8rem;">MAINTENANCE PROTOCOL STATUS</strong>
+                  <p id="ai-maint"
+                    style="font-size: 0.85rem; color: var(--text-dim); margin-top:8px; line-height: 1.5;"></p>
+                </div>
+              </div>
+              <div class="cat-item" style="border-left: 4px solid var(--yellow);">
+                <div>
+                  <strong class="mono" style="font-size: 0.8rem;">UNIT COST OPTIMIZATION</strong>
+                  <p id="ai-cost" style="font-size: 0.85rem; color: var(--text-dim); margin-top:8px; line-height: 1.5;">
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-panel" style="background: linear-gradient(180deg, rgba(94, 250, 242, 0.05), transparent);">
+            <h3 class="mono" style="margin-bottom: 25px; font-size: 0.9rem;">TRANSCEIVER STATUS</h3>
+            <div class="mono" style="font-size: 0.75rem; line-height: 2.2;">
+              <div style="color: var(--green);">[OK] NEXUS CONNECTIVITY</div>
+              <div style="color: var(--yellow);">[OK] CAPITAL EVALUATION</div>
+              <div style="color: var(--accent);">[OK] SECTORAL DATA SYNC</div>
+              <div style="color: var(--text);">[OK] BLUEPRINT EXTRACTION</div>
+              <div style="color: var(--text);">[OK] FEEDSTOCK MAP</div>
+              <div style="color: var(--text);">[OK] UNIT ARCHITECTURE</div>
+              <div
+                style="color: var(--accent); font-weight: 800; border-top: 1px solid var(--border); margin-top: 15px; padding-top: 15px;">
+                [ACTIVE] PREDICTIVE DASHBOARD</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+        <button class="btn" onclick="showStage('stage5')">REVERT TO MATRIX</button>
+        <div style="display: flex; gap: 20px;">
+          <button class="btn" onclick="showStage('stage1')">RESET NEXUS</button>
+          <button class="btn btn-primary" onclick="showStage('stage9')">CALCULATE ROI ➔</button>
+          <button class="btn btn-primary" onclick="showStage('stage8')">OPEN DATA HUB ➔</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ──────────── STAGE 9: ROI CALCULATOR ────────────────── -->
+    <section id="stage9" class="hidden">
+      <div class="stage-title">
+        <h1 class="glow-text">ROI Projection Engine</h1>
+        <p class="stage-subtitle">Perform high-fidelity financial modeling for the selected industrial blueprint.</p>
+      </div>
+
+      <div class="animate">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+          <!-- Inputs / Parameters -->
+          <div class="glass-panel">
+            <h3 class="mono" style="margin-bottom: 25px; font-size: 0.9rem; color: var(--accent);">[01] CAPITAL
+              PARAMETERS</h3>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div class="filter-group">
+                <label class="stat-lbl">TOTAL STARTUP CAPITAL (₹)</label>
+                <input type="number" id="roi-input-cost" class="mono"
+                  style="width: 100%; padding: 12px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 4px;">
+              </div>
+              <div class="filter-group">
+                <label class="stat-lbl">EST. MONTHLY REVENUE (₹)</label>
+                <input type="number" id="roi-input-revenue" class="mono"
+                  style="width: 100%; padding: 12px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 4px;">
+              </div>
+              <div class="filter-group">
+                <label class="stat-lbl">EST. MONTHLY OPEX (₹)</label>
+                <input type="number" id="roi-input-opex" class="mono"
+                  style="width: 100%; padding: 12px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 4px;">
+              </div>
+              <button class="btn btn-primary" style="margin-top: 10px;" onclick="calculateROI()">RE-CALIBRATE
+                PROJECTION</button>
+            </div>
+          </div>
+
+          <!-- Output / Analysis -->
+          <div class="glass-panel">
+            <h3 class="mono" style="margin-bottom: 25px; font-size: 0.9rem; color: var(--green);">[02] NEXUS FINANCIAL
+              ANALYTICS</h3>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div class="stat-box" style="padding: 20px;">
+                <span class="stat-lbl">MONTHLY NET PROFIT</span>
+                <span class="stat-val" id="roi-net-profit" style="color: var(--green);">₹0</span>
+              </div>
+              <div class="stat-box" style="padding: 20px;">
+                <span class="stat-lbl">ANNUALIZED PROJECTED YIELD</span>
+                <span class="stat-val" id="roi-annual-yield">₹0</span>
+              </div>
+              <div class="stat-box" style="padding: 20px; border: 2px solid var(--accent);">
+                <span class="stat-lbl">BREAK-EVEN HORIZON</span>
+                <span class="stat-val" id="roi-breakeven" style="font-size: 2.2rem; color: var(--accent);">--</span>
+              </div>
+              <div
+                style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 4px; border: 1px solid var(--border);">
+                <span class="stat-lbl" style="font-size: 0.65rem;">STRATEGIC ADVISORY</span>
+                <p id="roi-advisory" class="mono"
+                  style="font-size: 0.75rem; color: var(--text-dim); margin-top: 10px; line-height: 1.6;">Input
+                  parameters to initialize the financial intelligence engine.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+        <button class="btn" onclick="showStage('stage7')">REVERT TO DASHBOARD</button>
+        <button class="btn btn-primary" onclick="showStage('stage1')">RESET NEXUS ➔</button>
+      </div>
+    </section>
+
+    <!-- ──────────── STAGE 8: DATA HUB PROTOCOL ────────────────── -->
+    <section id="stage8" class="hidden">
+      <div class="stage-title">
+        <h1 class="glow-text">Data Hub Protocol</h1>
+        <p class="stage-subtitle">Discover strategic data sources categorized by operational frequency. Synchronize
+          external datasets with the internal intelligence nexus.</p>
+      </div>
+
+      <div class="glass-panel animate" style="margin-bottom: 40px;">
+        <div style="display: flex; gap: 25px; flex-wrap: wrap; justify-content: flex-start; align-items: flex-end;">
+          <div class="filter-group">
+            <label class="stat-lbl" style="display: block; margin-bottom: 8px;">SECTOR FILTER</label>
+            <select id="hub-filter-domain" class="mono"
+              style="width: 220px; padding: 12px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 4px;"
+              onchange="filterDataHub()">
+              <option value="All">ALL SECTORS</option>
+              <option value="Food Processing">FOOD PROCESSING</option>
+              <option value="Textile & Apparel">TEXTILE & APPAREL</option>
+              <option value="Automobile & Engineering">AUTO & ENGINEERING</option>
+              <option value="Electronics">ELECTRONICS</option>
+              <option value="Pharma & Chemicals">PHARMA & CHEMICALS</option>
+              <option value="Plastic & Polymer">PLASTIC & POLYMER</option>
+              <option value="Metal & Steel">METAL & STEEL</option>
+              <option value="FMCG">FMCG</option>
+              <option value="Smart Manufacturing / AI">SMART MANUFACTURING</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="stat-lbl" style="display: block; margin-bottom: 8px;">FREQ PROTOCOL</label>
+            <select id="hub-filter-freq" class="mono"
+              style="width: 180px; padding: 12px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 4px;"
+              onchange="filterDataHub()">
+              <option value="All">ALL FREQUENCIES</option>
+              <option value="monthly">MONTHLY [HIGH]</option>
+              <option value="quarterly">QUARTERLY [MID]</option>
+              <option value="yearly">YEARLY [STRATEGIC]</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="stat-lbl" style="display: block; margin-bottom: 8px;">DATA MODULE TYPE</label>
+            <select id="hub-filter-type" class="mono"
+              style="width: 220px; padding: 12px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 4px;"
+              onchange="filterDataHub()">
+              <option value="All">ALL MODULES</option>
+              <option value="Production">PRODUCTION</option>
+              <option value="Investment">INVESTMENT</option>
+              <option value="Raw Materials">RAW MATERIALS</option>
+              <option value="Machinery & Equipment">MACHINERY & EQUIP</option>
+              <option value="Financial Performance">FINANCIAL PERF</option>
+              <option value="Supply Chain & Logistics">SUPPLY CHAIN</option>
+              <option value="Quality & Maintenance">QUALITY & MAINT</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="hub-container animate">
+        <div id="hub-monthly" class="hub-section">
+          <h2 class="mono" style="color: var(--green); margin-bottom: 25px; font-size: 1rem;">[+] MONTHLY FREQUENCY
+            MODULES</h2>
+          <div class="card-grid" id="hub-monthly-list"></div>
+        </div>
+
+        <div id="hub-quarterly" class="hub-section" style="margin-top: 60px;">
+          <h2 class="mono" style="color: var(--yellow); margin-bottom: 25px; font-size: 1rem;">[+] QUARTERLY FREQUENCY
+            MODULES</h2>
+          <div class="card-grid" id="hub-quarterly-list"></div>
+        </div>
+
+        <div id="hub-yearly" class="hub-section" style="margin-top: 60px;">
+          <h2 class="mono" style="color: var(--accent); margin-bottom: 25px; font-size: 1rem;">[+] YEARLY FREQUENCY
+            MODULES</h2>
+          <div class="card-grid" id="hub-yearly-list"></div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 20px; margin-top: 60px;">
+        <button class="btn" onclick="showStage('stage1')">REVERT TO NEXUS</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ──────────── AI COPILOT CHAT FLOATING ────────────────── -->
+  <div id="ai-chat-widget" class="chat-widget">
+    <div class="chat-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div
+          style="width: 10px; height: 10px; background: var(--green); border-radius: 50%; box-shadow: 0 0 10px var(--green);">
+        </div>
+        <span class="mono" style="font-size: 0.8rem; font-weight: 800;">COPILOT NEXUS</span>
+      </div>
+      <button onclick="toggleChat()"
+        style="background: none; border: none; color: #fff; cursor: pointer; font-size: 1.2rem;">×</button>
+    </div>
+    <div id="chat-messages" class="chat-body">
+      <div class="msg bot">Greetings. I am the Nexus Copilot. How can I assist with your industrial operations?</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Query the nexus..."
+        onkeypress="if(event.key==='Enter') sendChatMessage()">
+      <button onclick="sendChatMessage()" class="btn btn-primary" style="padding: 10px 15px;">➔</button>
+    </div>
+  </div>
+
+  <button id="chat-toggle" class="chat-toggle-btn" onclick="toggleChat()">
+    🤖 <span class="mono" style="font-size: 0.7rem; font-weight: 800;">COPILOT</span>
+  </button>
+
+  <!-- ──────────── STAGE 10: OPPORTUNITY SIMULATOR ────────────────── -->
+  <section id="stage10" class="hidden">
+    <div class="stage-title">
+      <h1 class="glow-text">Opportunity Simulator</h1>
+      <p class="stage-subtitle">Validate custom business concepts and extract foundational industrial metrics via Groq
+        Intelligence.</p>
+    </div>
+
+    <div class="glass-panel animate">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 30px;">
+        <div class="filter-group">
+          <label class="stat-lbl" style="display: block; margin-bottom: 12px;">BUSINESS CONCEPT / PRODUCT IDEA</label>
+          <textarea id="sim-idea" class="mono"
+            style="width: 100%; height: 120px; padding: 15px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; line-height: 1.6;"
+            placeholder="e.g., Small-scale manufacturing of biodegradable cutlery from agricultural waste..."></textarea>
+        </div>
+
+        <div class="filter-group">
+          <label class="stat-lbl" style="display: block; margin-bottom: 12px;">PLANNED INVESTMENT (₹)</label>
+          <div style="display: flex; gap: 15px;">
+            <input type="number" id="sim-investment" class="mono"
+              style="flex: 1; padding: 12px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 8px;"
+              placeholder="e.g., 500000">
+            <select id="sim-currency" class="mono"
+              style="padding: 12px; background: #1a1e26; color: #fff; border: 1px solid var(--border); border-radius: 8px;">
+              <option value="INR">INR (₹)</option>
+              <option value="USD">USD ($)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="padding: 18px; font-size: 0.9rem; letter-spacing: 2px;"
+          onclick="runSimulation()">
+          RUN INTELLIGENCE SIMULATION ➔
+        </button>
+      </div>
+    </div>
+
+    <!-- Simulation Results (Hidden by default) -->
+    <div id="sim-results" class="hidden animate" style="margin-top: 40px;">
+      <div class="glass-panel" style="border-left: 6px solid var(--green);">
+        <h2 id="sim-res-title" style="margin-bottom: 25px; color: var(--accent); font-size: 1.3rem;">SIMULATED BLUEPRINT
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+          <div class="stat-box" style="padding: 15px;">
+            <span class="stat-lbl" style="font-size: 0.6rem;">EST. MONTHLY REVENUE</span>
+            <span class="stat-val" id="sim-res-revenue" style="font-size: 1rem; color: var(--green);">--</span>
+          </div>
+          <div class="stat-box" style="padding: 15px;">
+            <span class="stat-lbl" style="font-size: 0.6rem;">BREAK-EVEN PERIOD</span>
+            <span class="stat-val" id="sim-res-breakeven" style="font-size: 1rem; color: var(--accent);">--</span>
+          </div>
+          <div class="stat-box" style="padding: 15px;">
+            <span class="stat-lbl" style="font-size: 0.6rem;">MARKET VIABILITY</span>
+            <span class="stat-val" id="sim-res-viability" style="font-size: 1rem; color: var(--yellow);">--</span>
+          </div>
+        </div>
+
+        <div
+          style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 8px; border: 1px solid var(--border); line-height: 1.8;">
+          <h4 class="mono" style="margin-bottom: 15px; color: var(--accent); font-size: 0.8rem;">STRATEGIC EXECUTION
+            PLAN</h4>
+          <div id="sim-res-plan" class="mono" style="font-size: 0.85rem; color: var(--text-dim);"></div>
+        </div>
+
+        <div style="margin-top: 30px; display: flex; gap: 20px;">
+          <button class="btn" style="flex: 1; font-size: 0.75rem;" onclick="transferToCopilot()">EXPORT TO
+            COPILOT</button>
+          <button class="btn btn-primary" style="flex: 1; font-size: 0.75rem;" onclick="showStage('stage1')">INITIALIZE
+            AS OPERATIONAL</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px;">
+      <button class="btn" onclick="showStage('stage1')">REVERT TO NEXUS</button>
+    </div>
+  </section>
+
+  <!-- DATA PASSING (SECURE) -->
+  <script>
+    var domains = {{ domains | tojson | safe }};
+    var investments = {{ investments | tojson | safe }};
+    var dataHub = {{ data_hub | tojson | safe }};
+    var selection = {
+      investment: null,
+      domain: null,
+      business: null
+    };
+    var lastStage = 'stage1';
+  </script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+
+</html>
