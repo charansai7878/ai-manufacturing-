@@ -10,7 +10,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -31,7 +31,7 @@
       <div style="display: flex; align-items: center; gap: 30px;">
         <div style="text-align: right;">
           <div style="font-size: 0.7rem; color: var(--text-dim);">AUTHORIZED OPERATOR</div>
-          <div class="mono" style="font-size: 0.9rem; font-weight: 700;">{{ session.get('fullname') }}</div>
+          <div class="mono" style="font-size: 0.9rem; font-weight: 700;" id="username">OPERATOR</div>
         </div>
         <a href="/logout" class="btn" style="padding: 10px 20px; font-size: 0.75rem;">TERMINATE SESSION</a>
       </div>
@@ -82,14 +82,7 @@
         <div class="glass-panel nav-card animate" style="animation-delay: 0.2s;">
           <h3 class="mono" style="font-size: 1rem; margin-bottom: 25px; color: var(--accent);">[02] SECTORAL DOMAINS
           </h3>
-          <div class="domain-grid">
-            {% for key, d in domains.items() %}
-            <div class="domain-btn" onclick="showStage('stage3', '{{ key }}')">
-              <div style="font-size: 1.4rem; margin-bottom: 8px;">{{ d.icon }}</div>
-              <div class="mono" style="font-size: 0.7rem; font-weight: 700;">{{ d.title | upper }}</div>
-            </div>
-            {% endfor %}
-          </div>
+          <div class="domain-grid" id="domain-grid"></div>
         </div>
       </div>
 
@@ -612,19 +605,7 @@
     </div>
   </section>
 
-  <!-- DATA PASSING (SECURE) -->
-  <script>
-    var domains = {{ domains | tojson | safe }};
-    var investments = {{ investments | tojson | safe }};
-    var dataHub = {{ data_hub | tojson | safe }};
-    var selection = {
-      investment: null,
-      domain: null,
-      business: null
-    };
-    var lastStage = 'stage1';
-  </script>
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>

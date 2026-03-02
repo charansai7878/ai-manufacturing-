@@ -4,3 +4,4 @@ groq
 supabase
 postgrest
 gunicorn
+flask-cors

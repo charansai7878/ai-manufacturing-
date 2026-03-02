@@ -1,5 +1,6 @@
 
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for, flash
+from flask_cors import CORS
 import random, math, time, os, hashlib
 from datetime import datetime, timedelta
 from functools import wraps
@@ -25,6 +26,7 @@ app = Flask(__name__,
             template_folder=BASE_DIR,
             static_folder=BASE_DIR)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'manufacturing-overview-secret-2026')
+CORS(app, supports_credentials=True, origins=["https://ai-manufacturing.vercel.app", "http://localhost:5000"])
 
 # ════════════════════════════════════════════════════════════════
 #  DATABASE HELPERS (Supabase)
@@ -112,10 +114,30 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html", 
-                           domains=DOMAINS_DATA, 
-                           investments=INVESTMENT_DATA, 
-                           data_hub=INDUSTRY_DATA_HUB)
+    return render_template("index.html")
+
+@app.route("/api/user")
+@login_required
+def get_user():
+    return jsonify({
+        "fullname": session.get("fullname"),
+        "username": session.get("username")
+    })
+
+@app.route("/api/domains")
+@login_required
+def get_domains():
+    return jsonify(DOMAINS_DATA)
+
+@app.route("/api/investments")
+@login_required
+def get_investments():
+    return jsonify(INVESTMENT_DATA)
+
+@app.route("/api/data-hub")
+@login_required
+def get_data_hub_api():
+    return jsonify(INDUSTRY_DATA_HUB)
 
 @app.route("/api/overview")
 @login_required
