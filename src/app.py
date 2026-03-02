@@ -23,7 +23,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL and
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 app = Flask(__name__,
             template_folder=BASE_DIR,
-            static_folder=os.path.join(BASE_DIR, 'static'))
+            static_folder=BASE_DIR)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'manufacturing-overview-secret-2026')
 
 # ════════════════════════════════════════════════════════════════
