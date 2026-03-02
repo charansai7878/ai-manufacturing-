@@ -1,0 +1,7 @@
+src/
+requirements.txt
+*.py
+*.db
+.env
+__pycache__/
+templates/
